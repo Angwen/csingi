@@ -7,16 +7,30 @@ class Contracts(models.Model):
     tipus = models.CharField(max_length=25) # (('court'), ('general'), ('egyedi'))
     description = models.TextField()
 
+    def __str__(self):
+        return self.name
+
 
 class Udvarok(models.Model):
     court_name = models.CharField(max_length=10)
     court_contracts = models.ForeignKey(Contracts, on_delete=models.CASCADE)
 #    uralkodo = models.ForeignKey(CharacterStory, on_delete=models.CASCADE)
     description = models.TextField()
+    
+    def __str__(self):
+        return self.court_name
 
+
+class Players(models.Model):
+    player_name = models.CharField(max_length=25)
+    character_name = models.CharField(max_length=25)
+    e_mail = models.EmailField()
+
+    def __str__(self):
+        return self.player_name + " " + self.character_name + " " + self.e_mail
 
 class CharacterStory(models.Model):
-    character_name = models.CharField(max_length=25)
+    character_name = models.ForeignKey(Players, on_delete=models.CASCADE)
     lost = models.DateField()
     found = models.DateField()
     seeming_kith = models.CharField(max_length=25)
@@ -25,12 +39,8 @@ class CharacterStory(models.Model):
     uralkodo = models.BooleanField()
     status = models.BooleanField()
 
-
-class Players(models.Model):
-    player_name = models.CharField(max_length=25)
-    character_name = models.ForeignKey(CharacterStory, on_delete=models.CASCADE)
-    e_mail = models.EmailField()
-
+    def __str__(self):
+        return self.character_name
 
 class CharacterStats(models.Model):
     def elet(self):
@@ -54,18 +64,23 @@ class CharacterStats(models.Model):
     varazs = property(vegzet)
     tisztanlatas = models.IntegerField()
 
-
+    def __str__(self):
+        return self.character_name
 
 
 class CharacterMagic(models.Model):
     character_name = models.ForeignKey(CharacterStats, on_delete=models.CASCADE)
     magic_name = models.ForeignKey(Contracts, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.character_name
 
 class CharacterSkillsBackgrounds(models.Model):
     character_name = models.ForeignKey(CharacterStory, on_delete=models.CASCADE)
     skill_background_name = models.ForeignKey
 
+    def __str__(self):
+        return self.character_name
 
 class SkillsBackgrounds(models.Model):
     name = models.CharField(max_length=25)
@@ -74,6 +89,8 @@ class SkillsBackgrounds(models.Model):
     clarity_related = models.BooleanField()
     description = models.TextField()
 
+    def __str__(self):
+        return self.name
 
 class Pledges(models.Model):
     character_name = models.ForeignKey(CharacterStory, on_delete=models.CASCADE)
@@ -89,4 +106,6 @@ class Pledges(models.Model):
     curse = models.CharField(max_length=25)
     curse_metrics = models.IntegerField()
 
+    def __str__(self):
+        return self.character_name
 
