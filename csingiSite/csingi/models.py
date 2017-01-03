@@ -15,8 +15,19 @@ class Udvarok(models.Model):
     description = models.TextField()
 
 
-class CharacterStory(models.Model):
+class Players(models.Model):
+    player_name = models.CharField(max_length=25)
+#    character_name = models.ForeignKey(CharacterStory, on_delete=models.CASCADE)
     character_name = models.CharField(max_length=25)
+    e_mail = models.EmailField()
+
+    def __str__(self):
+        return "Player: {}, character: {}, e-mail: {}".format(self.player_name, self.character_name, self.e_mail)
+
+
+class CharacterStory(models.Model):
+#    character_name = models.CharField(max_length=25)
+    character_name = models.ForeignKey(Players, on_delete=models.CASCADE)
     lost = models.DateField()
     found = models.DateField()
     seeming_kith = models.CharField(max_length=25)
@@ -24,12 +35,6 @@ class CharacterStory(models.Model):
     udvar =models.ForeignKey(Udvarok, on_delete=models.CASCADE)
     uralkodo = models.BooleanField()
     status = models.BooleanField()
-
-
-class Players(models.Model):
-    player_name = models.CharField(max_length=25)
-    character_name = models.ForeignKey(CharacterStory, on_delete=models.CASCADE)
-    e_mail = models.EmailField()
 
 
 class CharacterStats(models.Model):
