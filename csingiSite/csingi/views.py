@@ -1,13 +1,30 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from .models import CharacterStory, Players
+from .forms import NameForm
 
 # Create your views here.
 
 
-def index():
-    pass
+def index(request):
+    return HttpResponse("Ez itten az index")
+
+
+def player_input(request):
+    template = loader.get_template("csingi/player_input.html")
+    context = {}
+    return HttpResponse(template.render(context, request))
+
+def get_player_name(request):
+    if request.method == 'POST':
+        form = NameForm(request.POST)
+        if form.is_valid():
+            return HttpResponseRedirect("https://www.youtube.com/watch?v=04854XqcfCY")
+        else:
+            form = NameForm()
+        return render(request, 'player_name.html', {'form': form})
+
 
 def player(request):
     data = Players.objects.all()
